@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CyberArena – UI Preview</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#0a1128;--card:#0f1b3d;--cy:#22d3ee;--pu:#a855f7;--tx:#e6edf7;--mu:#94a3b8;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 Inter,system-ui,sans-serif}
+nav{position:sticky;top:env(safe-area-inset-top,0px);display:flex;gap:4px;overflow-x:auto;padding:8px 12px;background:#0a1128f2;border-bottom:1px solid #22d3ee33;z-index:5}
+nav b{color:var(--cy);letter-spacing:.2em;align-self:center;margin-right:10px;white-space:nowrap}
+nav button{background:none;border:0;color:var(--tx);padding:8px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+nav button[aria-current=true]{background:#7e22ce}nav button:focus-visible,.btn:focus-visible,.opt:focus-visible{outline:2px solid #fff}
+main{max-width:860px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid #22d3ee33;border-radius:16px;padding:18px;transition:.2s}.card:hover{border-color:#22d3ee99;transform:translateY(-2px)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.btn{background:linear-gradient(90deg,var(--cy),var(--pu));color:#06101f;font-weight:700;border:0;border-radius:12px;padding:12px 20px;cursor:pointer}
+h1{font-size:clamp(2rem,6vw,3rem);margin:.2em 0;background:linear-gradient(90deg,#67e8f9,#c084fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{text-align:center;padding:40px 0}.code{font-size:2.2rem;letter-spacing:.35em;color:var(--cy);font-weight:800}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;background:#0a1128;color:var(--tx);border:1px solid #22d3ee44;border-radius:12px;padding:12px;cursor:pointer}
+.opt.ok{border-color:#34d399;background:#064e3b88}.opt.bad{border-color:#f87171;background:#7f1d1d88}
+.row{display:flex;justify-content:space-between;background:#16244d;border-radius:10px;padding:8px 12px;margin:5px 0}
+.tag{display:inline-block;background:#7e22ce55;border-radius:99px;padding:2px 10px;font-size:.8rem}.mu{color:var(--mu)}
+.timer{font-size:1.6rem;font-weight:800;color:#d8b4fe}.on{color:#34d399}.off{color:#64748b}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<nav aria-label="Main"><b>CYBERARENA</b></nav>
+<main><p class="tag">UI preview · sample data · not connected to the Supabase backend</p><div id="v"></div></main>
+<script>
+const NAV=['Home','Select a Game','Multiplayer Lobby','Live Game','Results','Leaderboard','Learning Center'];
+const nav=document.querySelector('nav'),v=document.getElementById('v');let cur=0,tm;
+NAV.forEach((n,i)=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>go(i);nav.appendChild(b)});
+const games=[['Phishing Detective','Spot scams in emails and texts.'],['Network Defender','Pick the right defensive move.'],['Crypto Breaker','Decode ciphers, choose sound crypto.'],['Secure the System','Choose secure configs and code.'],['Incident Response','Decide what to do at each stage.']];
+const ps=[['Maya',250,1],['Sam',200,1],['Jordan',150,1],['Lee',100,0]];
+const board='<div aria-label="Live leaderboard">'+ps.map(p=>`<div class="row"><span><span class="${p[2]?'on':'off'}">●</span> ${p[0]}</span><b>${p[1]}</b></div>`).join('')+'</div>';
+function go(i){cur=i;clearInterval(tm);[...nav.querySelectorAll('button')].forEach((b,j)=>b.setAttribute('aria-current',j==i));
+const P=[
+`<section class="hero"><h1>CyberArena Gaming Hub</h1><p class="mu">Five cybersecurity games. Create a room, share the code, play live with 2–8 friends. No account needed.</p><button class="btn" onclick="go(1)">Select a Game</button></section>`,
+`<div class="grid">${games.map(g=>`<div class="card"><h2 style="color:var(--cy);margin:0">${g[0]}</h2><p class="mu">${g[1]}</p><button class="btn" onclick="go(2)">Play</button></div>`).join('')}</div>`,
+`<div class="card"><p class="mu" style="margin:0">Room code · share with friends</p><div class="code">K7X2PQ</div><p>Players 4/8 · Mode: Individual</p>${board}<button class="btn" onclick="go(3)">Start game (host)</button></div>`,
+`<div class="card"><div style="display:flex;justify-content:space-between"><span>Round 2/5</span><span class="timer" id="t" aria-live="polite">20s</span></div>
+<p style="font-size:1.15rem">Email from “paypa1-support.com” says your account is locked; click within 1 hour.</p>
+${['Click the link','Report as phishing','Reply with password','Forward to coworkers'].map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')}<p id="ex" class="mu"></p><h3>Live scores</h3>${board}</div>`,
+`<div class="card"><h2 style="font-size:2rem;color:var(--cy);margin:0">🏆 Maya wins!</h2>${board}<button class="btn" onclick="go(3)">Play Again</button> <button class="btn" onclick="go(0)">Return Home</button></div>`,
+`<div class="card"><h2 style="margin-top:0">Top scores</h2>${ps.map((p,i)=>`<div class="row"><span>${i+1}. ${p[0]} · Phishing Detective</span><b>${p[1]}</b></div>`).join('')}</div>`,
+`<div class="grid">${games.map(g=>`<div class="card"><b>${g[0]}</b><p class="mu">${g[1]} Each answer shows an explanation after the round.</p></div>`).join('')}</div>`];
+v.innerHTML=P[i];
+if(i==3){let s=20;const t=document.getElementById('t');tm=setInterval(()=>{s=s>0?s-1:20;t.textContent=s+'s'},1000);
+v.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{v.querySelectorAll('.opt').forEach(o=>{o.disabled=true;o.classList.add(o.dataset.k==1?'ok':(o===b?'bad':''))});document.getElementById('ex').textContent='Look-alike domain plus urgency are classic phishing signals.'})}}
+go(0)
+</script></body></html>
